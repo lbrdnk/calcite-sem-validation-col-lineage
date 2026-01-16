@@ -48,7 +48,8 @@ public class JdbcValidationExample {
             // Invalid queries
             "SELECT invalid_column FROM CUSTOMERS",
             "SELECT * FROM NON_EXISTENT_TABLE",
-            "SELECT name FROM CUSTOMERS WHERE invalid_field = 1"
+            "SELECT name FROM CUSTOMERS WHERE invalid_field = 1",
+            "SELECT name - 10 FROM CUSTOMERS"
         };
         
         for (String query : testQueries) {
@@ -206,10 +207,11 @@ public class JdbcValidationExample {
             config
         );
         
-        // Create validator configuration
+        // Create validator configuration with strict type checking
         SqlValidator.Config validatorConfig = SqlValidator.Config.DEFAULT
             .withIdentifierExpansion(true)
-            .withSqlConformance(SqlConformanceEnum.DEFAULT);
+            .withSqlConformance(SqlConformanceEnum.DEFAULT)
+            .withTypeCoercionEnabled(false);  // Disable implicit type coercion
         
         // Create and return validator
         return SqlValidatorUtil.newValidator(
